@@ -1,0 +1,30 @@
+name: Проверка проекта
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-html:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить код
+        uses: actions/checkout@v4
+      - name: Установить html-validate
+        run: npm install -g html-validate
+      - name: Проверить index.html
+        run: html-validate frontend/index.html
+
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить код
+        uses: actions/checkout@v4
+      - name: Установить .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Собрать проект
+        run: dotnet build backend/TeamApi/TeamApi.csproj
