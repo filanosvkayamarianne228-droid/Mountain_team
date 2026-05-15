@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наша команда</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section id="team-section">
+        <h2>Наша команда</h2>
+        <div id="team-cards">
+            Загрузка...
+        </div>
+    </section>
+
+    <script>
+        const API_URL = 'http://localhost:7163/api/team';
+        
+        async function loadTeam() {
+            try {
+                const response = await fetch(API_URL);
+                const members = await response.json();
+                
+                const container = document.getElementById('team-cards');
+                container.innerHTML = members.map(m => 
+                    `<div class="card">
+                        <h3>${m.name}</h3>
+                        <p><strong>${m.role}</strong></p>
+                        <p>${m.fact}</p>
+                    </div>`
+                ).join('');
+            } catch (e) {
+                document.getElementById('team-cards').textContent =
+                    'API недоступен. Запустите бэкенд!';
+            }
+        }
+        
+        loadTeam();
+    </script>
+</body>
+</html>
